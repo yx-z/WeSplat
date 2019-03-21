@@ -1,3 +1,4 @@
+import os
 import time
 
 import itchat
@@ -15,6 +16,8 @@ CHINESE_NAME_LEAGUE = "组排"
 CHINESE_NAME_RANKED = "单排"
 CHINESE_NAME_REGULAR = "涂地"
 CHINESE_NAME_UNKNOWN = "未知"
+
+IMG_EXT = ".png"
 
 
 @itchat.msg_register(itchat.content.TEXT)
@@ -37,14 +40,14 @@ def text_reply(msg):
 
     user = msg.user
     user.send("{}模式: {}, 地图: {}".format(
-        get_chinese_name(mode),
-        schedule.mode,
+        get_chinese_name(mode), schedule.mode,
         list(map(lambda stage: stage.name, schedule.stages))))
 
     if any_in(KEYWORDS_IMAGES):
         for stage in schedule.stages:
-            file_name = stage.name
-            download_image(stage.img_url, file_name)
+            file_name = stage.name + IMG_EXT
+            if not os.path.isfile(file_name):  # download if not cached
+                download_image(stage.img_url, file_name)
             user.send_image(file_name)
 
 
