@@ -10,10 +10,10 @@ API_NAME_REGULAR = "regular"
 
 
 def request_schedule(mode: str, request_time: float) -> Schedule:
-    api_url = "https://splatoon2.ink/data/schedules.json"
-    schedules = requests.get(api_url).json()
+    data_url = "https://splatoon2.ink/data/schedules.json"
+    schedules: dict = requests.get(data_url).json()
 
-    for schedule in schedules[mode]:
+    for schedule in schedules.get(mode, []):
         start_time = schedule["start_time"]
         end_time = schedule["end_time"]
 

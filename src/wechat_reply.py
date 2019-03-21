@@ -7,7 +7,7 @@ from api import request_schedule, download_image, \
     API_NAME_LEAGUE, API_NAME_RANKED, API_NAME_REGULAR
 
 KEYWORDS_QUERY = ["查询"]
-KEYWORDS_LEAGUE = ["组排", "双排", "四排", "排排", "pp", "wyx", "加班"]
+KEYWORDS_LEAGUE = ["组排", "双排", "四排", "排排", "pp", "wyx"]
 KEYWORDS_RANKED = ["单排"]
 KEYWORDS_REGULAR = ["涂地", "普通"]
 
