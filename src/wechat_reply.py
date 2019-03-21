@@ -59,5 +59,6 @@ def get_chinese_name(mode: str) -> str:
     return CHINESE_NAME_UNKNOWN
 
 
-itchat.auto_login()
-itchat.run()
+if __name__ == "__main__":
+    itchat.auto_login(enableCmdQR=True)
+    itchat.run()
