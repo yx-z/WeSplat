@@ -8,7 +8,7 @@ from api import request_schedule, download_image, \
 
 KEYWORDS_QUERY = ["查询"]
 KEYWORDS_LEAGUE = ["组排", "双排", "四排", "排排", "pp", "wyx"]
-KEYWORDS_RANKED = ["单排"]
+KEYWORDS_RANKED = ["单排", "真格"]
 KEYWORDS_REGULAR = ["涂地", "普通"]
 
 CHINESE_NAME_LEAGUE = "组排"
