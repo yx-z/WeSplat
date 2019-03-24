@@ -89,7 +89,7 @@ def text_reply(msg):
         return
 
     requester.send("{}: {}模式, {}".format(
-        MODES.get(mode, "未知"), GAME_TYPES.get(schedule.mode, schedule.mode),
+        MODES.get(mode, mode), GAME_TYPES.get(schedule.mode, schedule.mode),
         " ".join(str(s) for s in list(map(lambda s: STAGES.get(s.name, s.name),
                                           schedule.stages))))
     )
