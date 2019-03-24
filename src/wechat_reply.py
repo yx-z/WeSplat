@@ -88,7 +88,7 @@ def text_reply(msg):
         requester.send(FAILED_MESSAGE)
         return
 
-    requester.send("{}模式: {}, 地图: {}".format(
+    requester.send("{}: {}模式, {}".format(
         MODES.get(mode, "未知"), GAME_TYPES.get(schedule.mode, schedule.mode),
         " ".join(str(s) for s in list(map(lambda s: STAGES.get(s.name, s.name),
                                           schedule.stages))))
