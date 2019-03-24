@@ -1,7 +1,7 @@
 # WeSplat
 WeChat auto-reply script for Splatoon 2 schedules
 
-# Configuration
+## Configuration
 - Python Version: 3.7
 
 ## Credits
