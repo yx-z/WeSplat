@@ -5,9 +5,9 @@ import requests
 
 from model import Stage, Schedule
 
-API_NAME_LEAGUE = "league"
-API_NAME_RANKED = "gachi"
-API_NAME_REGULAR = "regular"
+API_LEAGUE = "league"
+API_RANKED = "gachi"
+API_REGULAR = "regular"
 
 data_url = "https://splatoon2.ink/data/schedules.json"
 img_base = "https://splatoon2.ink/assets/splatnet"
@@ -25,7 +25,6 @@ def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
                             [create_stage(schedule["stage_a"]),
                              create_stage(schedule["stage_b"])]
                             )
-
     return None
 
 
