@@ -13,7 +13,37 @@ KEYWORDS_LEAGUE = [CN_LEAGUE, "双排", "四排", "排排", "pp", "wyx"]
 KEYWORDS_RANKED = [CN_RANKED, "真格"]
 KEYWORDS_REGULAR = [CN_REGULAR, "普通", "常规"]
 
-NAMES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
+MODES = {API_LEAGUE: CN_LEAGUE,
+         API_RANKED: CN_RANKED,
+         API_REGULAR: CN_REGULAR}
+
+GAME_TYPES = {"Tower Control": "塔",
+              "Splat Zones": "区域",
+              "Rainmaker": "鱼",
+              "Clam Blitz": "蛤蜊"}
+
+STAGES = {"Inkblot Art Academy": "美术大学",
+          "Blackbelly Skatepark": "公园/滑板场",
+          "Goby Arena": "篮球场",
+          "Arowana Mall": "商场/商业街",
+          "Ancho-V Games": "游戏场",
+          "Snapper Canal": "河滨",
+          "Starfish Mainstage": "音乐堂/露天剧场",
+          "Humpback Pump Track": "车道/赛车场",
+          "Wahoo World": "游乐园",
+          "Mako Mart": "超市",
+          "Piranha Pit": "矿山",
+          "Moray Towers": "停车场",
+          "Sturgeon Shipyard": "造船厂",
+          "Walleye Warehouse": "仓库",
+          "The Reef": "寿司街",
+          "Musselforge Fitness": "健身房",
+          "Port Mackerel": "码头",
+          "Manta Maria": "玛利亚号船",
+          "Kelp Dome": "农园",
+          "Camp Triggerfish": "营地",
+          "Skipper Pavilion": "楼宇（轴对称图）",
+          "Shifty Station": "祭典图"}
 
 TIME = {"半": 0.5, "一": 1, "两": 2, "三": 3, "四": 4, "五": 5,
         "六": 6, "七": 7, "八": 8, "九": 9, "十": 10}
@@ -59,8 +89,9 @@ def text_reply(msg):
         return
 
     requester.send("{}模式: {}, 地图: {}".format(
-        NAMES.get(mode, "未知"), schedule.mode,
-        list(map(lambda stage: stage.name, schedule.stages)))
+        MODES.get(mode, "未知"), GAME_TYPES.get(schedule.mode, schedule.mode),
+        " ".join(str(s) for s in list(map(lambda s: STAGES.get(s.name, s.name),
+                                          schedule.stages))))
     )
 
     for stage in schedule.stages:
