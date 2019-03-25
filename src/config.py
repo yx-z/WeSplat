@@ -1,5 +1,4 @@
 from translation import CN_LEAGUE, CN_RANKED, CN_REGULAR, CN_SALMON_RUN
-from util import IMG_EXT
 
 CMD_QR = True
 
@@ -12,4 +11,5 @@ UNKNOWN_MESSAGE = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
                   "格式: 查询 (当前/下个/X小时后) 组排/单排/涂地/打工"
 
 RES_DIR = "res/"
+IMG_EXT = ".png"
 CACHED_IMG = RES_DIR + "cached" + IMG_EXT

@@ -4,13 +4,11 @@ from urllib.request import Request
 
 from PIL import Image
 
-from config import RES_DIR
+from config import RES_DIR, IMG_EXT
 from model import Item
 
 MINUTES_EPOCH = 60
 HOURS_EPOCH = 60 * MINUTES_EPOCH
-
-IMG_EXT = ".png"
 
 
 def download_img(url: str, file_name):
