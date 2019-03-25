@@ -16,7 +16,7 @@ CN_REGULAR = "普通"
 CN_SALMON_RUN = "打工"
 
 KEYWORDS_LEAGUE = [CN_LEAGUE, "双排", "四排", "排排", "pp", "wyx"]
-KEYWORDS_RANKED = [CN_RANKED, "真格"]
+KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体"]
 KEYWORDS_REGULAR = [CN_REGULAR, "涂地", "常规"]
 KEYWORDS_SALMON_RUN = [CN_SALMON_RUN, "dg", "工"]
 
