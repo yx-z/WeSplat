@@ -5,7 +5,8 @@ import itchat
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
-    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MESSAGE, CMD_QR, CACHED_IMG
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, CACHED_IMG, \
+    UNKNOWN_COUNT_LIMIT, TOO_MANY_UNKNOWNS_MSG
 from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR
 from util import combine_imgs, HOURS_EPOCH, \
@@ -13,17 +14,19 @@ from util import combine_imgs, HOURS_EPOCH, \
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
-
-@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
-def reply_group(msg):
-    reply(msg)
+unknown_count = 0
 
 
-@itchat.msg_register(itchat.content.TEXT)
-def reply_friend(msg):
-    reply(msg)
+def handle_unknown_msg(requester):
+    global unknown_count
+    unknown_count += 1
+    if unknown_count <= UNKNOWN_COUNT_LIMIT:
+        requester.send_msg(UNKNOWN_MSG)
+    else:
+        requester.send_msg(TOO_MANY_UNKNOWNS_MSG)
 
 
+@itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
 def reply(msg):
     request_input = msg.text
     request_time = msg.createTime
@@ -46,7 +49,7 @@ def reply(msg):
         elif any_in(KEYWORDS_REGULAR):
             mode = API_REGULAR
         if mode is None:
-            requester.send_msg(UNKNOWN_MESSAGE)
+            handle_unknown_msg(requester)
         else:
             reply_battle(requester, mode, request_time, request_input)
 
