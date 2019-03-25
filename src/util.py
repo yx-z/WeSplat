@@ -1,5 +1,6 @@
 import os.path as path
 from urllib import request
+from urllib.request import Request
 
 from PIL import Image
 
@@ -9,7 +10,8 @@ IMG_EXT = ".png"
 
 def download_img(url: str, file_name):
     file = open(file_name, "wb")
-    file.write(request.urlopen(url).read())
+    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    file.write(request.urlopen(req).read())
     file.close()
 
 
