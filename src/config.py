@@ -4,7 +4,7 @@ from util import IMG_EXT
 CMD_QR = True
 
 KEYWORDS_LEAGUE = [CN_LEAGUE, "双排", "四排", "排排", "pp", "wyx"]
-KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体"]
+KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体", "自闭"]
 KEYWORDS_REGULAR = [CN_REGULAR, "涂地", "常规"]
 KEYWORDS_SALMON_RUN = [CN_SALMON_RUN, "dg", "工"]
 
