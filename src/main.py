@@ -93,8 +93,8 @@ def text_reply(msg):
     requester.send("{}: {}模式, {}".format(
         MODES.get(mode, mode), GAME_TYPES.get(schedule.mode, schedule.mode),
         " ".join(str(s) for s in list(map(lambda s: STAGES.get(s.name, s.name),
-                                          schedule.stages))))
-    )
+                                          schedule.stages)))
+    ))
 
     for stage in schedule.stages:
         curr_dir = os.path.dirname(__file__)
