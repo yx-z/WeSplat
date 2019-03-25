@@ -14,12 +14,21 @@ from util import combine_imgs, HOURS_EPOCH, \
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
 
+@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
+def reply_group(msg):
+    reply(msg)
+
+
 @itchat.msg_register(itchat.content.TEXT)
+def reply_friend(msg):
+    reply(msg)
+
+
 def reply(msg):
     request_input = msg.text
     request_time = msg.createTime
     requester = msg.user
-    
+
     if not request_input.startswith("查询"):
         return
 
