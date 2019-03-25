@@ -8,8 +8,6 @@ API_LEAGUE = "league"
 API_RANKED = "gachi"
 API_REGULAR = "regular"
 
-img_base = "https://splatoon2.ink/assets/splatnet"
-
 
 def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
     data_url = "https://splatoon2.ink/data/schedules.json"
@@ -31,17 +29,9 @@ def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
     salmon_runs = requests.get(data_url).json()
 
     for salmon_run in salmon_runs["details"]:
-        start_time = salmon_run["start_time"]
-        end_time = salmon_run["end_time"]
+        if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
+            return create_salmon_run(salmon_run)
 
-        if start_time <= request_time <= end_time:
-            weapons = list(map(lambda weapon_dict: next(v for (k, v)
-                                                        in weapon_dict.items()
-                                                        if "weapon" in k),
-                               salmon_run["weapons"]))
-            return SalmonRun(start_time, end_time,
-                             create_item(salmon_run["stage"]),
-                             list(map(create_item, weapons)))
     return None
 
 
@@ -49,10 +39,24 @@ def request_next_salmon_run() -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
     details = salmon_runs["details"]
-    if len(details) == 0:
+    lens = len(details)
+    if lens == 0:
         return None
+    elif lens == 1:
+        return create_salmon_run(details[0])
     else:
-        return request_salmon_run(details[-1]["start_time"])
+        return create_salmon_run(details[1])
+
+def create_salmon_run(run_dict: dict) -> SalmonRun:
+    weapons = list(map(lambda weapon_dict: next(v for (k, v)
+                                                in weapon_dict.items()
+                                                if "weapon" in k),
+                       run_dict["weapons"]))
+    return SalmonRun(run_dict["start_time"], run_dict["end_time"],
+                     create_item(run_dict["stage"]),
+                     list(map(create_item, weapons)))
+
 
 def create_item(item_dict: dict) -> Item:
+    img_base = "https://splatoon2.ink/assets/splatnet"
     return Item(item_dict["name"], img_base + item_dict["image"])
