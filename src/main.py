@@ -13,8 +13,6 @@ from util import combine_imgs, HOURS_EPOCH, \
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
-unknown_count = 0
-
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
 def reply(msg):
