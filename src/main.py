@@ -23,7 +23,7 @@ MODES = {API_LEAGUE: CN_LEAGUE,
          API_REGULAR: CN_REGULAR}
 
 UNKNOWN_MESSAGE = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
-                  "格式: 查询 (当前/下个/X小时后) 组排/单排/普通/打工"
+                  "格式: 查询 (当前/下个/X小时后) 组排/单排/涂地/打工"
 
 MINUTES_EPOCH = 60
 HOURS_EPOCH = 60 * MINUTES_EPOCH
