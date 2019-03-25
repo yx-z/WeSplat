@@ -4,29 +4,14 @@ import itchat
 
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
-from model import Item
+from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MESSAGE, CMD_QR, CACHED_IMG
 from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
-    CN_RANKED, CN_REGULAR, CN_SALMON_RUN
-from util import download_img, combine_imgs, RES_DIR, IMG_EXT
+    CN_RANKED, CN_REGULAR
+from util import combine_imgs, HOURS_EPOCH, \
+    diff_minutes, dict_get, cache_img, diff_hours
 
-CMD_QR = True
-
-KEYWORDS_LEAGUE = [CN_LEAGUE, "双排", "四排", "排排", "pp", "wyx"]
-KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体"]
-KEYWORDS_REGULAR = [CN_REGULAR, "涂地", "常规"]
-KEYWORDS_SALMON_RUN = [CN_SALMON_RUN, "dg", "工"]
-
-MODES = {API_LEAGUE: CN_LEAGUE,
-         API_RANKED: CN_RANKED,
-         API_REGULAR: CN_REGULAR}
-
-UNKNOWN_MESSAGE = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
-                  "格式: 查询 (当前/下个/X小时后) 组排/单排/涂地/打工"
-
-MINUTES_EPOCH = 60
-HOURS_EPOCH = 60 * MINUTES_EPOCH
-
-COMBINED_IMAGE = RES_DIR + "combined" + IMG_EXT
+MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
 
 @itchat.msg_register(itchat.content.TEXT)
@@ -71,19 +56,17 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
         else:
             remain_message = "还有{}小时开始".format(
                 diff_hours(request_time, run.start_time))
-        requester.send_msg("{remaining}, " "地图:{stage}, "
-                           "武器: {weapon}".format(
-            remaining=remain_message,
-            stage=STAGES.get(run.stage.name, run.stage.name),
+        requester.send_msg("{rem}, " "地图:{stage}, 武器: {weapon}".format(
+            rem=remain_message,
+            stage=dict_get(STAGES, run.stage.name),
             weapon=" ".join(str(s) for s in list(map(
-                lambda w: WEAPONS.get(w.name, w.name), run.weapons)))))
+                lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
 
         stage_img = cache_img([run.stage])[0]
         if path.isfile(stage_img):
             requester.send_image(stage_img)
-        if combine_imgs(cache_img(run.weapons), COMBINED_IMAGE,
-                        vertical=False) and path.isfile(COMBINED_IMAGE):
-            requester.send_image(COMBINED_IMAGE)
+        if combine_imgs(cache_img(run.weapons), CACHED_IMG, vertical=False):
+            requester.send_image(CACHED_IMG)
 
 
 def reply_battle(requester, mode: str, msg_time: float, request_input: str):
@@ -110,33 +93,15 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
     else:
         remain_message = " (还有{}分钟开始) ".format(
             diff_minutes(msg_time, schedule.start_time))
-    requester.send_msg("{mode}: {type}模式{remaining}, 地图: {stage}".format(
-        mode=MODES.get(mode, mode),
-        type=BATTLES.get(schedule.mode, schedule.mode),
-        remaining=remain_message,
+    requester.send_msg("{mode}: {type}模式{rem}, 地图: {stage}".format(
+        mode=dict_get(MODES, mode),
+        type=dict_get(BATTLES, schedule.mode),
+        rem=remain_message,
         stage=" ".join(str(s) for s in
-                       list(map(lambda s: STAGES.get(s.name, s.name),
+                       list(map(lambda s: dict_get(STAGES, s.name),
                                 schedule.stages)))))
-    if combine_imgs(cache_img(schedule.stages), COMBINED_IMAGE):
-        requester.send_image(COMBINED_IMAGE)
-
-
-def diff_minutes(epoch1: float, epoch2: float) -> int:
-    return int(abs(epoch1 - epoch2) / MINUTES_EPOCH)
-
-
-def diff_hours(epoch1: float, epoch2: float) -> int:
-    return int(abs(epoch1 - epoch2) / HOURS_EPOCH)
-
-
-def cache_img(items: [Item]) -> [str]:
-    files = []
-    for item in items:
-        file_name = RES_DIR + item.name + IMG_EXT
-        files.append(file_name)
-        if not path.isfile(file_name):  # sequential download
-            download_img(item.img_url, file_name)
-    return files
+    if combine_imgs(cache_img(schedule.stages), CACHED_IMG):
+        requester.send_image(CACHED_IMG)
 
 
 if __name__ == "__main__":

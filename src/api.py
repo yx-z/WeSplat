@@ -47,6 +47,7 @@ def request_next_salmon_run() -> Optional[SalmonRun]:
     else:
         return create_salmon_run(details[1])
 
+
 def create_salmon_run(run_dict: dict) -> SalmonRun:
     weapons = list(map(lambda weapon_dict: next(v for (k, v)
                                                 in weapon_dict.items()
