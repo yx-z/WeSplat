@@ -8,6 +8,8 @@ from model import Item
 from translation import TIME, GAME_TYPES, STAGES, WEAPONS
 from util import download_img, combine_imgs, RES_DIR, IMG_EXT
 
+CMD_QR = True
+
 CN_LEAGUE = "组排"
 CN_RANKED = "单排"
 CN_REGULAR = "普通"
@@ -143,5 +145,8 @@ def cache_img(items: [Item]) -> [str]:
 
 
 if __name__ == "__main__":
-    itchat.auto_login(enableCmdQR=False)
+    if CMD_QR:
+        itchat.auto_login(enableCmdQR=2)
+    else:
+        itchat.auto_login()
     itchat.run()
