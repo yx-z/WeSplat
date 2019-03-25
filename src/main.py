@@ -96,10 +96,12 @@ def text_reply(msg):
     )
 
     for stage in schedule.stages:
-        file_name = "../res/" + stage.name + ".png"
+        curr_dir = os.path.dirname(__file__)
+        file_name = os.path.join(curr_dir, "../res/" + stage.name + ".png")
         if not os.path.isfile(file_name):  # download if not cached
             download_image(stage.img_url, file_name)
-        requester.send_image(file_name)
+        if os.path.isfile(file_name):
+            requester.send_image(file_name)
 
 
 if __name__ == "__main__":
