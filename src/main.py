@@ -3,7 +3,7 @@ import os.path as path
 import itchat
 
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
-    request_next_salmon_run_time, request_salmon_run
+    request_next_salmon_run, request_salmon_run
 from model import Item
 from translation import TIME, GAME_TYPES, STAGES, WEAPONS
 from util import download_img, combine_imgs, RES_DIR, IMG_EXT
@@ -48,33 +48,34 @@ def reply(msg):
     """
     if any_in(KEYWORDS_SALMON_RUN):
         if "下" in request_input:
-            next_time = request_next_salmon_run_time(request_time)
-            if next_time is None:
-                requester.send_msg("木有找到打工信息")
-            else:
-                remain_hours = diff_hours(request_time, next_time)
-                if remain_hours == 0:
-                    requester.send_msg("现在打工开着")
-                else:
-                    requester.send_msg("还有{}小时开工".format(remain_hours))
+            find_next = True
+            run = request_next_salmon_run()
         else:
+            find_next = False
             run = request_salmon_run(request_time)
-            if run is None:
-                requester.send_msg("木有找到打工信息")
-            else:
-                requester.send_msg("剩余{remaining}小时, " "地图:{stage}, "
-                                   "武器: {weapon}".format(
-                    remaining=diff_hours(request_time, run.end_time),
-                    stage=STAGES.get(run.stage.name, run.stage.name),
-                    weapon=" ".join(str(s) for s in list(map(
-                        lambda w: WEAPONS.get(w.name, w.name), run.weapons)))))
 
-                stage_img = cache_img([run.stage])[0]
-                if path.isfile(stage_img):
-                    requester.send_image(stage_img)
-                if combine_imgs(cache_img(run.weapons), COMBINED_IMAGE,
-                                vertical=False) and path.isfile(COMBINED_IMAGE):
-                    requester.send_image(COMBINED_IMAGE)
+        if run is None:
+            requester.send_msg("木有找到打工信息")
+        else:
+            if find_next:
+                remain_message = "还有{}小时开工".format(
+                    diff_hours(request_time, run.start_time))
+            else:
+                remain_message = "剩余{}小时".format(
+                    diff_hours(request_time, run.end_time))
+            requester.send_msg("{remaining}, " "地图:{stage}, "
+                               "武器: {weapon}".format(
+                remaining=remain_message,
+                stage=STAGES.get(run.stage.name, run.stage.name),
+                weapon=" ".join(str(s) for s in list(map(
+                    lambda w: WEAPONS.get(w.name, w.name), run.weapons)))))
+
+            stage_img = cache_img([run.stage])[0]
+            if path.isfile(stage_img):
+                requester.send_image(stage_img)
+            if combine_imgs(cache_img(run.weapons), COMBINED_IMAGE,
+                            vertical=False) and path.isfile(COMBINED_IMAGE):
+                requester.send_image(COMBINED_IMAGE)
         return
 
     """

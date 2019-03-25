@@ -13,7 +13,7 @@ img_base = "https://splatoon2.ink/assets/splatnet"
 
 def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
     data_url = "https://splatoon2.ink/data/schedules.json"
-    schedules: dict = requests.get(data_url).json()
+    schedules = requests.get(data_url).json()
 
     for schedule in schedules.get(mode, []):
         start_time = schedule["start_time"]
@@ -28,7 +28,7 @@ def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
 
 def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
-    salmon_runs: dict = requests.get(data_url).json()
+    salmon_runs = requests.get(data_url).json()
 
     for salmon_run in salmon_runs["details"]:
         start_time = salmon_run["start_time"]
@@ -45,20 +45,14 @@ def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
     return None
 
 
-def request_next_salmon_run_time(request_time: float) -> Optional[float]:
+def request_next_salmon_run() -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
-    salmon_runs: dict = requests.get(data_url).json()
-
-    for time_periods in salmon_runs["schedules"]:
-        start_time = time_periods["start_time"]
-        end_time = time_periods["end_time"]
-        if request_time <= end_time:
-            if request_time > start_time:
-                return request_time
-            else:
-                return start_time
-    return None
-
+    salmon_runs = requests.get(data_url).json()
+    details = salmon_runs["details"]
+    if len(details) == 0:
+        return None
+    else:
+        return request_salmon_run(details[-1]["start_time"])
 
 def create_item(item_dict: dict) -> Item:
     return Item(item_dict["name"], img_base + item_dict["image"])
