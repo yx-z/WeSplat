@@ -5,7 +5,7 @@ import itchat
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from model import Item
-from translation import TIME, GAME_TYPES, STAGES, WEAPONS, CN_LEAGUE, \
+from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR, CN_SALMON_RUN
 from util import download_img, combine_imgs, RES_DIR, IMG_EXT
 
@@ -58,21 +58,19 @@ def reply(msg):
 
 def reply_salmon_run(requester, request_time: float, request_input: str):
     if "下" in request_input:
-        find_next = True
         run = request_next_salmon_run()
     else:
-        find_next = False
         run = request_salmon_run(request_time)
 
     if run is None:
         requester.send_msg("木有找到打工信息")
     else:
-        if find_next:
-            remain_message = "还有{}小时开始".format(
-                diff_hours(request_time, run.start_time))
-        else:
+        if run.start_time <= request_time <= run.end_time:
             remain_message = "剩余{}小时结束".format(
                 diff_hours(request_time, run.end_time))
+        else:
+            remain_message = "还有{}小时开始".format(
+                diff_hours(request_time, run.start_time))
         requester.send_msg("{remaining}, " "地图:{stage}, "
                            "武器: {weapon}".format(
             remaining=remain_message,
@@ -88,9 +86,10 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
             requester.send_image(COMBINED_IMAGE)
 
 
-def reply_battle(requester, mode: str, request_time: float, request_input: str):
+def reply_battle(requester, mode: str, msg_time: float, request_input: str):
+    global query_time
     if "下" in request_input:
-        request_time += 2 * HOURS_EPOCH
+        query_time = msg_time + 2 * HOURS_EPOCH
     elif "小时后" in request_input:
         index = request_input.index("小时后") - 1
         num_char = request_input[index]
@@ -98,22 +97,22 @@ def reply_battle(requester, mode: str, request_time: float, request_input: str):
             parsed = int(num_char)
         except ValueError:
             parsed = TIME.get(request_input[index], 0)
-        request_time += parsed * HOURS_EPOCH
+        query_time = msg_time + parsed * HOURS_EPOCH
 
-    schedule = request_schedule(mode, request_time)
+    schedule = request_schedule(mode, query_time)
     if schedule is None:
         requester.send_msg("木有找到模式信息")
         return
 
-    if schedule.start_time <= request_time <= schedule.end_time:
-        remain_minutes = diff_minutes(request_time, schedule.end_time)
-        remain_message = " (剩余{}分钟结束) ".format(remain_minutes)
+    if schedule.start_time <= msg_time <= schedule.end_time:
+        remain_message = " (剩余{}分钟结束) ".format(
+            diff_minutes(msg_time, schedule.end_time))
     else:
-        remain_minutes = diff_minutes(request_time, schedule.start_time)
-        remain_message = " (还有{}分钟开始)".format(remain_minutes)
+        remain_message = " (还有{}分钟开始) ".format(
+            diff_minutes(msg_time, schedule.start_time))
     requester.send_msg("{mode}: {type}模式{remaining}, 地图: {stage}".format(
         mode=MODES.get(mode, mode),
-        type=GAME_TYPES.get(schedule.mode, schedule.mode),
+        type=BATTLES.get(schedule.mode, schedule.mode),
         remaining=remain_message,
         stage=" ".join(str(s) for s in
                        list(map(lambda s: STAGES.get(s.name, s.name),

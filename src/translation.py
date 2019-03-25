@@ -3,11 +3,11 @@ CN_RANKED = "单排"
 CN_REGULAR = "普通"
 CN_SALMON_RUN = "打工"
 
-GAME_TYPES = {"Tower Control": "塔",
-              "Splat Zones": "区域",
-              "Rainmaker": "鱼",
-              "Clam Blitz": "蛤蜊",
-              "Turf War": "涂地"}
+BATTLES = {"Tower Control": "塔",
+           "Splat Zones": "区域",
+           "Rainmaker": "鱼",
+           "Clam Blitz": "蛤蜊",
+           "Turf War": "涂地"}
 
 STAGES = {"Inkblot Art Academy": "美术大学",
           "Blackbelly Skatepark": "滑板场",
