@@ -68,10 +68,10 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
         requester.send_msg("木有找到打工信息")
     else:
         if find_next:
-            remain_message = "还有{}小时开工".format(
+            remain_message = "还有{}小时开始".format(
                 diff_hours(request_time, run.start_time))
         else:
-            remain_message = "剩余{}小时".format(
+            remain_message = "剩余{}小时结束".format(
                 diff_hours(request_time, run.end_time))
         requester.send_msg("{remaining}, " "地图:{stage}, "
                            "武器: {weapon}".format(
@@ -107,9 +107,10 @@ def reply_battle(requester, mode: str, request_time: float, request_input: str):
 
     if schedule.start_time <= request_time <= schedule.end_time:
         remain_minutes = diff_minutes(request_time, schedule.end_time)
-        remain_message = " (剩余{}分钟) ".format(remain_minutes)
+        remain_message = " (剩余{}分钟结束) ".format(remain_minutes)
     else:
-        remain_message = ""
+        remain_minutes = diff_minutes(request_time, schedule.start_time)
+        remain_message = " (还有{}分钟开始)".format(remain_minutes)
     requester.send_msg("{mode}: {type}模式{remaining}, 地图: {stage}".format(
         mode=MODES.get(mode, mode),
         type=GAME_TYPES.get(schedule.mode, schedule.mode),
