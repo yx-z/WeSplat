@@ -32,7 +32,7 @@ STAGES = {"Inkblot Art Academy": "美术大学",
           "Marooner's Bay": "破难船",
           "Lost Outpost": "房子",
           "Salmonid Smokeyard": "电梯(两侧图)",
-          "Ruins of Ark Polaris‎‎": "极地(新图)"}
+          "Ruins of Ark Polaris": "极地(新图)"}
 
 WEAPONS = {".52 Gal": "52",
            ".96 Gal": "96",
