@@ -7,10 +7,8 @@ KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体", "自闭"]
 KEYWORDS_REGULAR = [CN_REGULAR, "涂地", "常规"]
 KEYWORDS_SALMON_RUN = [CN_SALMON_RUN, "dg", "工"]
 
-UNKNOWN_COUNT_LIMIT = 5
 UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "格式: 查询 (当前/下个/X小时后) 组排/单排/涂地/打工"
-TOO_MANY_UNKNOWNS_MSG = "不理你了 好好用bot阿喂😢"
 
 RES_DIR = "res/"
 IMG_EXT = ".png"
