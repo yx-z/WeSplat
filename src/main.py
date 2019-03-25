@@ -16,9 +16,10 @@ MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
 @itchat.msg_register(itchat.content.TEXT)
 def reply(msg):
-    request_input: str = msg.text
+    request_input = msg.text
     request_time = msg.createTime
     requester = msg.user
+    
     if not request_input.startswith("查询"):
         return
 
@@ -49,24 +50,25 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
 
     if run is None:
         requester.send_msg("木有找到打工信息")
-    else:
-        if run.start_time <= request_time <= run.end_time:
-            remain_message = "剩余{}小时结束".format(
-                diff_hours(request_time, run.end_time))
-        else:
-            remain_message = "还有{}小时开始".format(
-                diff_hours(request_time, run.start_time))
-        requester.send_msg("({rem}), 地图: {stage}, 武器: {weapon}".format(
-            rem=remain_message,
-            stage=dict_get(STAGES, run.stage.name),
-            weapon=" ".join(str(s) for s in list(map(
-                lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
+        return
 
-        stage_img = cache_img([run.stage])[0]
-        if path.isfile(stage_img):
-            requester.send_image(stage_img)
-        if combine_imgs(cache_img(run.weapons), CACHED_IMG, vertical=False):
-            requester.send_image(CACHED_IMG)
+    if run.start_time <= request_time <= run.end_time:
+        remain_message = "剩余{}小时结束".format(
+            diff_hours(request_time, run.end_time))
+    else:
+        remain_message = "还有{}小时开始".format(
+            diff_hours(request_time, run.start_time))
+    requester.send_msg("({rem}), 地图: {stage}, 武器: {weapon}".format(
+        rem=remain_message,
+        stage=dict_get(STAGES, run.stage.name),
+        weapon=" ".join(str(s) for s in list(map(
+            lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
+
+    stage_img = cache_img([run.stage])[0]
+    if path.isfile(stage_img):
+        requester.send_image(stage_img)
+    if combine_imgs(cache_img(run.weapons), CACHED_IMG, vertical=False):
+        requester.send_image(CACHED_IMG)
 
 
 def reply_battle(requester, mode: str, msg_time: float, request_input: str):
@@ -100,6 +102,7 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
         stage=" ".join(str(s) for s in
                        list(map(lambda s: dict_get(STAGES, s.name),
                                 schedule.stages)))))
+
     if combine_imgs(cache_img(schedule.stages), CACHED_IMG):
         requester.send_image(CACHED_IMG)
 
