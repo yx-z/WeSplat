@@ -5,15 +5,11 @@ import itchat
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from model import Item
-from translation import TIME, GAME_TYPES, STAGES, WEAPONS
+from translation import TIME, GAME_TYPES, STAGES, WEAPONS, CN_LEAGUE, \
+    CN_RANKED, CN_REGULAR, CN_SALMON_RUN
 from util import download_img, combine_imgs, RES_DIR, IMG_EXT
 
 CMD_QR = True
-
-CN_LEAGUE = "组排"
-CN_RANKED = "单排"
-CN_REGULAR = "普通"
-CN_SALMON_RUN = "打工"
 
 KEYWORDS_LEAGUE = [CN_LEAGUE, "双排", "四排", "排排", "pp", "wyx"]
 KEYWORDS_RANKED = [CN_RANKED, "真格", "伤身体"]
@@ -36,64 +32,63 @@ COMBINED_IMAGE = RES_DIR + "combined" + IMG_EXT
 @itchat.msg_register(itchat.content.TEXT)
 def reply(msg):
     request_input: str = msg.text
+    request_time = msg.createTime
+    requester = msg.user
     if not request_input.startswith("查询"):
         return
 
     def any_in(keywords: [str]) -> bool:
         return any(keyword in request_input for keyword in keywords)
 
-    request_time = msg.createTime
-    requester = msg.user
-
-    """
-    Salmon Run
-    """
     if any_in(KEYWORDS_SALMON_RUN):
-        if "下" in request_input:
-            find_next = True
-            run = request_next_salmon_run()
+        reply_salmon_run(requester, request_time, request_input)
+    else:
+        mode = None
+        if any_in(KEYWORDS_LEAGUE):
+            mode = API_LEAGUE
+        elif any_in(KEYWORDS_RANKED):
+            mode = API_RANKED
+        elif any_in(KEYWORDS_REGULAR):
+            mode = API_REGULAR
+        if mode is None:
+            requester.send_msg(UNKNOWN_MESSAGE)
         else:
-            find_next = False
-            run = request_salmon_run(request_time)
+            reply_battle(requester, mode, request_time, request_input)
 
-        if run is None:
-            requester.send_msg("木有找到打工信息")
+
+def reply_salmon_run(requester, request_time: float, request_input: str):
+    if "下" in request_input:
+        find_next = True
+        run = request_next_salmon_run()
+    else:
+        find_next = False
+        run = request_salmon_run(request_time)
+
+    if run is None:
+        requester.send_msg("木有找到打工信息")
+    else:
+        if find_next:
+            remain_message = "还有{}小时开工".format(
+                diff_hours(request_time, run.start_time))
         else:
-            if find_next:
-                remain_message = "还有{}小时开工".format(
-                    diff_hours(request_time, run.start_time))
-            else:
-                remain_message = "剩余{}小时".format(
-                    diff_hours(request_time, run.end_time))
-            requester.send_msg("{remaining}, " "地图:{stage}, "
-                               "武器: {weapon}".format(
-                remaining=remain_message,
-                stage=STAGES.get(run.stage.name, run.stage.name),
-                weapon=" ".join(str(s) for s in list(map(
-                    lambda w: WEAPONS.get(w.name, w.name), run.weapons)))))
+            remain_message = "剩余{}小时".format(
+                diff_hours(request_time, run.end_time))
+        requester.send_msg("{remaining}, " "地图:{stage}, "
+                           "武器: {weapon}".format(
+            remaining=remain_message,
+            stage=STAGES.get(run.stage.name, run.stage.name),
+            weapon=" ".join(str(s) for s in list(map(
+                lambda w: WEAPONS.get(w.name, w.name), run.weapons)))))
 
-            stage_img = cache_img([run.stage])[0]
-            if path.isfile(stage_img):
-                requester.send_image(stage_img)
-            if combine_imgs(cache_img(run.weapons), COMBINED_IMAGE,
-                            vertical=False) and path.isfile(COMBINED_IMAGE):
-                requester.send_image(COMBINED_IMAGE)
-        return
+        stage_img = cache_img([run.stage])[0]
+        if path.isfile(stage_img):
+            requester.send_image(stage_img)
+        if combine_imgs(cache_img(run.weapons), COMBINED_IMAGE,
+                        vertical=False) and path.isfile(COMBINED_IMAGE):
+            requester.send_image(COMBINED_IMAGE)
 
-    """
-    Battle
-    """
-    mode = None
-    if any_in(KEYWORDS_LEAGUE):
-        mode = API_LEAGUE
-    elif any_in(KEYWORDS_RANKED):
-        mode = API_RANKED
-    elif any_in(KEYWORDS_REGULAR):
-        mode = API_REGULAR
-    if mode is None:
-        requester.send_msg(UNKNOWN_MESSAGE)
-        return
 
+def reply_battle(requester, mode: str, request_time: float, request_input: str):
     if "下" in request_input:
         request_time += 2 * HOURS_EPOCH
     elif "小时后" in request_input:

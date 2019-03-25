@@ -1,3 +1,8 @@
+CN_LEAGUE = "组排"
+CN_RANKED = "单排"
+CN_REGULAR = "普通"
+CN_SALMON_RUN = "打工"
+
 GAME_TYPES = {"Tower Control": "塔",
               "Splat Zones": "区域",
               "Rainmaker": "鱼",
