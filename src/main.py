@@ -44,6 +44,7 @@ STAGES = {"Inkblot Art Academy": "美术大学",
           "Camp Triggerfish": "营地",
           "Skipper Pavilion": "古楼",
           "New Albacore Hotel": "酒店",
+          "Shellendorf Institute": "博物馆",
           "Shifty Station": "祭典图"}
 
 TIME = {"半": 0.5, "一": 1, "两": 2, "三": 3, "四": 4, "五": 5,
@@ -77,7 +78,7 @@ def text_reply(msg):
         return
 
     request_time = msg["CreateTime"]
-    if "下个" in request_input:
+    if "下" in request_input:
         request_time += 2 * HOURS_EPOCH
     elif "小时后" in request_input:
         index = request_input.index("小时后") - 1
@@ -105,5 +106,5 @@ def text_reply(msg):
 
 
 if __name__ == "__main__":
-    itchat.auto_login()
+    itchat.auto_login(enableCmdQR=2)
     itchat.run()
