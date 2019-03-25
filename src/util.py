@@ -1,7 +1,6 @@
 import os.path as path
-import shutil
+from urllib import request
 
-import requests
 from PIL import Image
 
 RES_DIR = "res/"
@@ -9,10 +8,9 @@ IMG_EXT = ".png"
 
 
 def download_img(url: str, file_name):
-    response = requests.get(url, stream=True)
-    with open(file_name, "wb") as out_file:
-        shutil.copyfileobj(response.raw, out_file)
-    del response
+    file = open(file_name, "wb")
+    file.write(request.urlopen(url).read())
+    file.close()
 
 
 def combine_imgs(src_names: [str], out_name: str, vertical=True) -> bool:
