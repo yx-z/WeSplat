@@ -6,4 +6,5 @@ WeChat auto-reply script for Splatoon 2 schedules
 
 ## Credits
 - Data and image source: [Splatoon2.ink](https://splatoon2.ink)
-- Dependency: [ItChat](https://github.com/littlecodersh/itchat)
+- Dependency: [ItChat](https://github.com/littlecodersh/itchat),
+              [Pillow](https://github.com/python-pillow/Pillow)
