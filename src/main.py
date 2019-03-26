@@ -27,13 +27,13 @@ def reply(msg):
         return any(keyword in request_input for keyword in keywords)
 
     if any_in(KEYWORDS_ALL):
-        reply_salmon_run(requester, request_time, request_input)
         mode = API_LEAGUE
         reply_battle(requester, mode, request_time, request_input)
         mode = API_RANKED
         reply_battle(requester, mode, request_time, request_input)
         mode = API_REGULAR
         reply_battle(requester, mode, request_time, request_input)
+        reply_salmon_run(requester, request_time, request_input)
     elif any_in(KEYWORDS_SALMON_RUN):
         reply_salmon_run(requester, request_time, request_input)
     else:
