@@ -5,7 +5,7 @@ import itchat
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
-    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, CACHED_IMG
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, CACHED_IMG, KEYWORDS_ALL
 from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR
 from util import combine_imgs, HOURS_EPOCH, \
@@ -26,7 +26,15 @@ def reply(msg):
     def any_in(keywords: [str]) -> bool:
         return any(keyword in request_input for keyword in keywords)
 
-    if any_in(KEYWORDS_SALMON_RUN):
+    if any_in(KEYWORDS_ALL):
+        reply_salmon_run(requester, request_time, request_input)
+        mode = API_LEAGUE
+        reply_battle(requester, mode, request_time, request_input)
+        mode = API_RANKED
+        reply_battle(requester, mode, request_time, request_input)
+        mode = API_REGULAR
+        reply_battle(requester, mode, request_time, request_input)
+    elif any_in(KEYWORDS_SALMON_RUN):
         reply_salmon_run(requester, request_time, request_input)
     else:
         mode = None
