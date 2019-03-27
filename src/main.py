@@ -1,15 +1,15 @@
-import os.path as path
+import os
 
 import itchat
 
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
-    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, CACHED_IMG, KEYWORDS_ALL
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, KEYWORDS_ALL, TMP_IMG
 from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR
-from util import combine_imgs, HOURS_EPOCH, \
-    diff_minutes, dict_get, cache_img, diff_hours
+from util import combine_imgs, HOURS_EPOCH, diff_minutes, dict_get, diff_hours, download_img, \
+    remove_if_exist
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -57,7 +57,7 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
         run = request_salmon_run(request_time)
 
     if run is None:
-        requester.send_msg("木有找到打工信息")
+        requester.send_msg("木有找到当前打工信息")
         return
 
     if run.start_time <= request_time <= run.end_time:
@@ -66,17 +66,21 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
     else:
         remain_message = "还有{}小时开始".format(
             diff_hours(request_time, run.start_time))
-    requester.send_msg("({rem}), 地图: {stage}, 武器: {weapon}".format(
+    requester.send_msg("{rem}, 地图: {stage}, 武器: {weapon}".format(
         rem=remain_message,
         stage=dict_get(STAGES, run.stage.name),
         weapon=" ".join(str(s) for s in list(map(
             lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
 
-    stage_img = cache_img([run.stage])[0]
-    if path.isfile(stage_img):
-        requester.send_image(stage_img)
-    if combine_imgs(cache_img(run.weapons), CACHED_IMG, vertical=False):
-        requester.send_image(CACHED_IMG)
+    remove_if_exist(TMP_IMG)
+    download_img(run.stage.img_url).save(TMP_IMG)
+    if os.path.isfile(TMP_IMG):
+        requester.send_image(TMP_IMG)
+
+    remove_if_exist(TMP_IMG)
+    if combine_imgs(list(map(lambda w: download_img(w.img_url),
+                             run.weapons)), TMP_IMG, vertical=False):
+        requester.send_image(TMP_IMG)
 
 
 def reply_battle(requester, mode: str, msg_time: float, request_input: str):
@@ -94,7 +98,7 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
 
     schedule = request_schedule(mode, query_time)
     if schedule is None:
-        requester.send_msg("木有找到模式信息")
+        requester.send_msg("木有找到当前模式信息")
         return
 
     if schedule.start_time <= msg_time <= schedule.end_time:
@@ -111,8 +115,11 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
                        list(map(lambda s: dict_get(STAGES, s.name),
                                 schedule.stages)))))
 
-    if combine_imgs(cache_img(schedule.stages), CACHED_IMG):
-        requester.send_image(CACHED_IMG)
+    remove_if_exist(TMP_IMG)
+    if combine_imgs(list(map(lambda s: download_img(s.img_url),
+                             schedule.stages)), TMP_IMG):
+        if os.path.isfile(TMP_IMG):
+            requester.send_image(TMP_IMG)
 
 
 if __name__ == "__main__":

@@ -1,35 +1,28 @@
-import os.path as path
-from urllib import request
-from urllib.request import Request
+import io
+import os
 
-from PIL import Image
-
-from config import RES_DIR, IMG_EXT
-from model import Item
+import requests
+from PIL import Image as Img
 
 MINUTES_EPOCH = 60
 HOURS_EPOCH = 60 * MINUTES_EPOCH
 
 
-def download_img(url: str, file_name):
-    file = open(file_name, "wb")
-    req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-    file.write(request.urlopen(req).read())
-    file.close()
+def download_img(url: str) -> Img:
+    return Img.open(io.BytesIO(requests.get(url).content))
 
 
-def combine_imgs(src: [str], out: str, vertical=True) -> bool:
-    images = list(map(Image.open, filter(lambda img: path.isfile(img), src)))
-    if len(images) == 0:
+def combine_imgs(src: [Img], out: str, vertical=True) -> bool:
+    if len(src) == 0:
         return False
 
-    widths, heights = zip(*(i.size for i in images))
+    widths, heights = zip(*(i.size for i in src))
     if vertical:
-        combined = Image.new("RGB", (max(widths), sum(heights)))
+        combined = Img.new("RGB", (max(widths), sum(heights)))
     else:
-        combined = Image.new("RGB", (sum(widths), max(heights)))
+        combined = Img.new("RGB", (sum(widths), max(heights)))
     offset = 0
-    for i in images:
+    for i in src:
         if vertical:
             combined.paste(i, (0, offset))
             offset += i.size[1]
@@ -38,16 +31,6 @@ def combine_imgs(src: [str], out: str, vertical=True) -> bool:
             offset += i.size[0]
     combined.save(out)
     return True
-
-
-def cache_img(items: [Item]) -> [str]:
-    files = []
-    for item in items:
-        file_name = RES_DIR + item.name + IMG_EXT
-        files.append(file_name)
-        if not path.isfile(file_name):  # sequential download
-            download_img(item.img_url, file_name)
-    return files
 
 
 def diff_minutes(epoch1: float, epoch2: float) -> int:
@@ -60,3 +43,8 @@ def diff_hours(epoch1: float, epoch2: float) -> int:
 
 def dict_get(d: dict, key: str) -> str:
     return d.get(key, key)
+
+
+def remove_if_exist(file: str):
+    if os.path.exists(file):
+        os.remove(file)

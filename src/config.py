@@ -11,6 +11,4 @@ KEYWORDS_ALL = ["全部", "所有", "all"]
 UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "格式: 查询 (当前/下个/X小时后) 全部/组排/单排/涂地/打工"
 
-RES_DIR = "res/"
-IMG_EXT = ".png"
-CACHED_IMG = RES_DIR + "cached" + IMG_EXT
+TMP_IMG = "tmp.png"
