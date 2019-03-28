@@ -86,7 +86,7 @@ def reply_salmon_run(requester, request_time: float, request_input: str):
 def reply_battle(requester, mode: str, msg_time: float, request_input: str):
     query_time = msg_time
     if "下" in request_input:
-        query_time = msg_time + 2 * HOURS_EPOCH
+        query_time = msg_time + (2 * HOURS_EPOCH) * request_input.count("下")
     elif "小时后" in request_input:
         index = request_input.index("小时后") - 1
         num_char = request_input[index]
