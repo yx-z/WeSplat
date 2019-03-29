@@ -7,12 +7,14 @@ from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
     KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, KEYWORDS_ALL, TMP_IMG, \
     NUM_PLAYERS_PER_TEAM, KEYWORDS_RANDOM
-from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
+from translation import TIME, BATTLE_TYPES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR
 from util import combine_imgs, HOURS_EPOCH, diff_minutes, dict_get, diff_hours, download_img, \
     remove_if_exist, dict_rand_value
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
+BATTLE_WEAPONS = WEAPONS.copy()
+BATTLE_WEAPONS.pop("Random", "")
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
@@ -112,7 +114,7 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
             diff_minutes(msg_time, schedule.start_time))
     requester.send_msg("{mode}: {type}模式 ({rem}), 地图: {stage}".format(
         mode=dict_get(MODES, mode),
-        type=dict_get(BATTLES, schedule.mode),
+        type=dict_get(BATTLE_TYPES, schedule.mode),
         rem=remain_message,
         stage=" ".join(str(s) for s in
                        list(map(lambda s: dict_get(STAGES, s.name),
@@ -126,12 +128,12 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
 
 
 def reply_random(requester):
-    mode = dict_rand_value(BATTLES)
+    mode = dict_rand_value(BATTLE_TYPES)
     team_A = []
     team_B = []
     for i in range(NUM_PLAYERS_PER_TEAM):
-        team_A.append(dict_rand_value(WEAPONS))
-        team_B.append(dict_rand_value(WEAPONS))
+        team_A.append(dict_rand_value(BATTLE_WEAPONS))
+        team_B.append(dict_rand_value(BATTLE_WEAPONS))
     requester.send_msg("模式: {}\n"
                        "红队: {}\n"
                        "绿队: {}".format(mode,
