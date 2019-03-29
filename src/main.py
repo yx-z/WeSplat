@@ -126,7 +126,7 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
 
 
 def reply_random(requester):
-    mode = dict_rand_value(MODES)
+    mode = dict_rand_value(BATTLES)
     team_A = []
     team_B = []
     for i in range(NUM_PLAYERS_PER_TEAM):
