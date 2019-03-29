@@ -1,5 +1,6 @@
 import io
 import os
+import random
 
 import requests
 from PIL import Image as Img
@@ -43,6 +44,14 @@ def diff_hours(epoch1: float, epoch2: float) -> int:
 
 def dict_get(d: dict, key: str) -> str:
     return d.get(key, key)
+
+
+def dict_rand_value(d: dict):
+    size = len(d)
+    if size > 0:
+        return list(d.values())[random.randint(0, size - 1)]
+    else:
+        return None
 
 
 def remove_if_exist(file: str):

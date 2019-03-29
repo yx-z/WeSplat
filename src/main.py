@@ -5,11 +5,12 @@ import itchat
 from api import request_schedule, API_LEAGUE, API_RANKED, API_REGULAR, \
     request_next_salmon_run, request_salmon_run
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
-    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, KEYWORDS_ALL, TMP_IMG
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, KEYWORDS_ALL, TMP_IMG, \
+    NUM_PLAYERS_PER_TEAM, KEYWORDS_RANDOM
 from translation import TIME, BATTLES, STAGES, WEAPONS, CN_LEAGUE, \
     CN_RANKED, CN_REGULAR
 from util import combine_imgs, HOURS_EPOCH, diff_minutes, dict_get, diff_hours, download_img, \
-    remove_if_exist
+    remove_if_exist, dict_rand_value
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -26,7 +27,9 @@ def reply(msg):
     def any_in(keywords: [str]) -> bool:
         return any(keyword in request_input for keyword in keywords)
 
-    if any_in(KEYWORDS_ALL):
+    if any_in(KEYWORDS_RANDOM):
+        reply_random(requester)
+    elif any_in(KEYWORDS_ALL):
         mode = API_LEAGUE
         reply_battle(requester, mode, request_time, request_input)
         mode = API_RANKED
@@ -120,6 +123,22 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
                              schedule.stages)), TMP_IMG):
         if os.path.isfile(TMP_IMG):
             requester.send_image(TMP_IMG)
+
+
+def reply_random(requester):
+    mode = dict_rand_value(MODES)
+    stage = dict_rand_value(STAGES)
+    team_A = []
+    team_B = []
+    for i in range(NUM_PLAYERS_PER_TEAM):
+        team_A.append(dict_rand_value(WEAPONS))
+        team_B.append(dict_rand_value(WEAPONS))
+    requester.send_msg("{}, {}模式：".format(stage, mode))
+    requester.send_msg("红队: {}".format(" ".join(team_A)))
+    requester.send_msg("绿队: {}".format(" ".join(team_B)))
+    requester.send_msg("武器贴牌与否可自选, "
+                       "随机结果不好可再查询, "
+                       "可忽略随机出结果 (如地图)")
 
 
 if __name__ == "__main__":
