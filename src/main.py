@@ -126,19 +126,13 @@ def reply_battle(requester, mode: str, msg_time: float, request_input: str):
 
 
 def reply_random(requester):
-    mode = dict_rand_value(MODES)
-    stage = dict_rand_value(STAGES)
     team_A = []
     team_B = []
     for i in range(NUM_PLAYERS_PER_TEAM):
         team_A.append(dict_rand_value(WEAPONS))
         team_B.append(dict_rand_value(WEAPONS))
-    requester.send_msg("{}, {}模式：".format(stage, mode))
-    requester.send_msg("红队: {}".format(" ".join(team_A)))
-    requester.send_msg("绿队: {}".format(" ".join(team_B)))
-    requester.send_msg("武器贴牌与否可自选, "
-                       "随机结果不好可再查询, "
-                       "可忽略随机出结果 (如地图)")
+    requester.send_msg("红队: {}\n"
+                       "绿队: {}".format(" ".join(team_A), " ".join(team_B)))
 
 
 if __name__ == "__main__":
