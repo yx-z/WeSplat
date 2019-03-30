@@ -34,7 +34,7 @@ def reply_salmon_run(requester,
         else:
             remain_message = "还有{}小时开始".format(
                 diff_hours(request_time, run.start_time))
-        requester.send_msg("{rem}, 地图: {stage}, 武器: {weapon}".format(
+        requester.send_msg("打工: {rem}, 地图: {stage}, 武器: {weapon}".format(
             rem=remain_message,
             stage=dict_get(STAGES, run.stage.name),
             weapon=" ".join(str(s) for s in list(map(
@@ -82,7 +82,7 @@ def reply_battle(requester,
         else:
             remain_message = "还有{}分钟开始".format(
                 diff_minutes(msg_time, schedule.start_time))
-        requester.send_msg("{mode}: {type}模式 ({rem}), 地图: {stage}".format(
+        requester.send_msg("{mode}: {type}模式, {rem}, 地图: {stage}".format(
             mode=dict_get(MODES, mode),
             type=dict_get(BATTLE_TYPES, schedule.mode),
             rem=remain_message,
