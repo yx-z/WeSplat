@@ -105,7 +105,8 @@ def reply_random(requester):
     for i in range(NUM_PLAYERS_PER_TEAM):
         team_A.append(dict_rand_value(BATTLE_WEAPONS))
         team_B.append(dict_rand_value(BATTLE_WEAPONS))
-    requester.send_msg("模式: {}\n"
+    requester.send_msg("(武器可自选贴牌版)\n"
+                       "模式: {}\n"
                        "红队: {}\n"
                        "绿队: {}".format(mode,
                                        " ".join(team_A),

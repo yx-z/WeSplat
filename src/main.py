@@ -54,7 +54,7 @@ def reply(msg):
 
 if __name__ == "__main__":
     if CMD_QR:
-        itchat.auto_login(enableCmdQR=2)
+        itchat.auto_login(enableCmdQR=2, hotReload=True)
     else:
         itchat.auto_login()
     itchat.run()
