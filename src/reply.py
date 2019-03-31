@@ -13,6 +13,25 @@ BATTLE_WEAPONS = WEAPONS.copy()
 BATTLE_WEAPONS.pop("Random", "")
 
 
+def reply_all(requester, request_time: float, request_input: str):
+    mode = API_LEAGUE
+    reply_battle(requester, mode, request_time, request_input, img=False)
+    mode = API_RANKED
+    reply_battle(requester, mode, request_time, request_input, img=False)
+    mode = API_REGULAR
+    reply_battle(requester, mode, request_time, request_input, img=False)
+    reply_salmon_run(requester, request_time, request_input, img=False)
+
+    mode = API_LEAGUE
+    reply_battle(requester, mode, request_time, request_input, txt=False)
+    mode = API_RANKED
+    reply_battle(requester, mode, request_time, request_input, txt=False)
+    mode = API_REGULAR
+    reply_battle(requester, mode, request_time, request_input, txt=False)
+
+    reply_salmon_run(requester, request_time, request_input, txt=False)
+
+
 def reply_salmon_run(requester,
                      request_time: float,
                      request_input: str,
@@ -22,7 +41,6 @@ def reply_salmon_run(requester,
         run = request_next_salmon_run()
     else:
         run = request_salmon_run(request_time)
-
     if run is None:
         requester.send_msg("木有找到当前打工信息")
         return
@@ -100,14 +118,14 @@ def reply_battle(requester,
 
 def reply_random(requester):
     mode = dict_rand_value(BATTLE_TYPES)
-    team_A = []
-    team_B = []
+    team_a = []
+    team_b = []
     for i in range(NUM_PLAYERS_PER_TEAM):
-        team_A.append(dict_rand_value(BATTLE_WEAPONS))
-        team_B.append(dict_rand_value(BATTLE_WEAPONS))
+        team_a.append(dict_rand_value(BATTLE_WEAPONS))
+        team_b.append(dict_rand_value(BATTLE_WEAPONS))
     requester.send_msg("(武器可自选贴牌版)\n"
                        "模式: {}\n"
                        "红队: {}\n"
                        "绿队: {}".format(mode,
-                                       " ".join(team_A),
-                                       " ".join(team_B)))
+                                       " ".join(team_a),
+                                       " ".join(team_b)))
