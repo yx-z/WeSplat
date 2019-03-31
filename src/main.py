@@ -1,8 +1,9 @@
 import itchat
 
 from api import API_LEAGUE, API_RANKED, API_REGULAR
-from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, KEYWORDS_RANKED, \
-    KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, KEYWORDS_ALL, KEYWORDS_RANDOM
+from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, \
+    KEYWORDS_ALL, KEYWORDS_RANDOM, KEYWORDS_QUERY
 from reply import reply_random, reply_battle, reply_salmon_run, reply_all
 
 
@@ -12,7 +13,7 @@ def reply(msg):
     request_time = msg.createTime
     requester = msg.user
 
-    if not request_input.startswith("查询"):
+    if not any(request_input.startswith(query) for query in KEYWORDS_QUERY):
         return
 
     def any_in(keywords: [str]) -> bool:
@@ -42,5 +43,5 @@ if __name__ == "__main__":
     if CMD_QR:
         itchat.auto_login(enableCmdQR=2, hotReload=True)
     else:
-        itchat.auto_login()
+        itchat.auto_login(hotReload=True)
     itchat.run()
