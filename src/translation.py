@@ -29,15 +29,15 @@ STAGES = {"Inkblot Art Academy": "美术大学",
           "Manta Maria": "玛利亚号",
           "Kelp Dome": "农园",
           "Camp Triggerfish": "营地",
-          "Skipper Pavilion": "古楼",
+          "Skipper Pavilion": "古楼寺庙",
           "New Albacore Hotel": "酒店",
           "Shellendorf Institute": "博物馆",
           "Shifty Station": "祭典图",
           "Spawning Grounds": "初始教学图",
           "Marooner's Bay": "破难船",
           "Lost Outpost": "房子",
-          "Salmonid Smokeyard": "电梯(两侧图)",
-          "Ruins of Ark Polaris": "极地(新图)"}
+          "Salmonid Smokeyard": "电梯",
+          "Ruins of Ark Polaris": "极地"}
 
 WEAPONS = {".52 Gal": "52",
            ".96 Gal": "96",

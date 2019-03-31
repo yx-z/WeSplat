@@ -9,6 +9,7 @@ from util import remove_if_exist, dict_get, diff_hours, \
     download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
+
 BATTLE_WEAPONS = WEAPONS.copy()
 BATTLE_WEAPONS.pop("Random", "")
 
@@ -28,7 +29,6 @@ def reply_all(requester, request_time: float, request_input: str):
     reply_battle(requester, mode, request_time, request_input, txt=False)
     mode = API_REGULAR
     reply_battle(requester, mode, request_time, request_input, txt=False)
-
     reply_salmon_run(requester, request_time, request_input, txt=False)
 
 
@@ -44,7 +44,6 @@ def reply_salmon_run(requester,
     if run is None:
         requester.send_msg("木有找到当前打工信息")
         return
-
     if txt:
         if run.start_time <= request_time <= run.end_time:
             remain_message = "剩余{}小时结束".format(
@@ -57,7 +56,6 @@ def reply_salmon_run(requester,
             stage=dict_get(STAGES, run.stage.name),
             weapon=" ".join(str(s) for s in list(map(
                 lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
-
     if img:
         remove_if_exist(TMP_IMG)
         download_img(run.stage.img_url).save(TMP_IMG)
@@ -92,7 +90,6 @@ def reply_battle(requester,
     if schedule is None:
         requester.send_msg("木有找到当前模式信息")
         return
-
     if txt:
         if schedule.start_time <= msg_time <= schedule.end_time:
             remain_message = "剩余{}分钟结束".format(
@@ -107,7 +104,6 @@ def reply_battle(requester,
             stage=" ".join(str(s) for s in
                            list(map(lambda s: dict_get(STAGES, s.name),
                                     schedule.stages)))))
-
     if img:
         remove_if_exist(TMP_IMG)
         if combine_imgs(list(map(lambda s: download_img(s.img_url),

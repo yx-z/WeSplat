@@ -16,7 +16,6 @@ def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
     for schedule in schedules.get(mode, []):
         start_time = schedule["start_time"]
         end_time = schedule["end_time"]
-
         if start_time <= request_time <= end_time:
             return Schedule(start_time, end_time, schedule["rule"]["name"],
                             [create_item(schedule["stage_a"]),
@@ -31,7 +30,6 @@ def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
     for salmon_run in salmon_runs["details"]:
         if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
             return create_salmon_run(salmon_run)
-
     return None
 
 
