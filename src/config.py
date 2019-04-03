@@ -18,3 +18,5 @@ UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
 TMP_IMG = "tmp.png"
 
 NUM_PLAYERS_PER_TEAM = 4
+
+RANDOM_IMG_URL = "https://loremflickr.com/320/240/splatoon"

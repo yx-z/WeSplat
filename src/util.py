@@ -5,6 +5,8 @@ import random
 import requests
 from PIL import Image as Img
 
+from config import TMP_IMG
+
 MINUTES_EPOCH = 60
 HOURS_EPOCH = 60 * MINUTES_EPOCH
 
@@ -32,6 +34,13 @@ def combine_imgs(src: [Img], out: str, vertical=True) -> bool:
             offset += i.size[0]
     combined.save(out)
     return True
+
+
+def send_img(img_url: str, target, file_name: str = TMP_IMG):
+    remove_if_exist(file_name)
+    download_img(img_url).save(file_name)
+    if os.path.isfile(file_name):
+        target.send_image(file_name)
 
 
 def diff_minutes(epoch1: float, epoch2: float) -> int:

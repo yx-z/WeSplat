@@ -2,11 +2,11 @@ import os
 
 from api import request_next_salmon_run, request_salmon_run, \
     request_schedule, API_RANKED, API_REGULAR, API_LEAGUE
-from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG
+from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG, RANDOM_IMG_URL
 from translation import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
-    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value
+    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_img
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -57,10 +57,7 @@ def reply_salmon_run(requester,
             weapon=" ".join(str(s) for s in list(map(
                 lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
     if img:
-        remove_if_exist(TMP_IMG)
-        download_img(run.stage.img_url).save(TMP_IMG)
-        if os.path.isfile(TMP_IMG):
-            requester.send_image(TMP_IMG)
+        send_img(run.stage.img_url, requester)
 
         remove_if_exist(TMP_IMG)
         if combine_imgs(list(map(lambda w: download_img(w.img_url),
@@ -128,9 +125,5 @@ def reply_random(requester):
 
 
 def reply_unknown(requester):
-    img_url = "https://loremflickr.com/320/240/splatoon"
     requester.send_msg(UNKNOWN_MSG)
-    download_img(img_url).save(TMP_IMG)
-    remove_if_exist(TMP_IMG)
-    if os.path.isfile(TMP_IMG):
-        requester.send_image(TMP_IMG)
+    send_img(RANDOM_IMG_URL, requester)
