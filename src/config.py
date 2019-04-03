@@ -13,10 +13,11 @@ KEYWORDS_RANDOM = ["随机"]
 UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "格式:\n" \
               " - 查询 (当前/下个/下下...个/X小时后) 全部/组排/单排/涂地/打工\n" \
-              " - 查询随机 [用来随机武器私房]"
+              " - 查询随机 [用来随机武器私房]\n" \
+              "发张图就溜~"
 
 TMP_IMG = "tmp.png"
 
 NUM_PLAYERS_PER_TEAM = 4
 
-RANDOM_IMG_URL = "https://loremflickr.com/320/240/splatoon"
+RANDOM_IMG_URL = "https://loremflickr.com/640/480/splatoon2"
