@@ -129,6 +129,6 @@ def reply_unknown(requester):
 
 
 def reply_img(requester, keyword: str):
-    requester.send_msg("图片查询中")
     img_url = "https://loremflickr.com/320/240/"
+    requester.send_msg("{}图查询中".format(keyword))
     send_img(img_url + keyword, requester)
