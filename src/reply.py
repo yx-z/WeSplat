@@ -2,11 +2,12 @@ import os
 
 from api import request_next_salmon_run, request_salmon_run, \
     request_schedule, API_RANKED, API_REGULAR, API_LEAGUE
-from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG, RANDOM_IMG_URL
+from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG, RAND_IMG_URL_BASE, RAND_IMG_KEYWORDS
 from translation import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
-    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_img
+    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_img, \
+    list_rand_value
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -126,4 +127,4 @@ def reply_random(requester):
 
 def reply_unknown(requester):
     requester.send_msg(UNKNOWN_MSG)
-    send_img(RANDOM_IMG_URL, requester)
+    send_img(RAND_IMG_URL_BASE + list_rand_value(RAND_IMG_KEYWORDS), requester)

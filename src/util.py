@@ -56,9 +56,13 @@ def dict_get(d: dict, key: str) -> str:
 
 
 def dict_rand_value(d: dict):
-    size = len(d)
+    return list_rand_value(list(d.values()))
+
+
+def list_rand_value(l: list):
+    size = len(l)
     if size > 0:
-        return list(d.values())[random.randint(0, size - 1)]
+        return l[random.randint(0, size - 1)]
     else:
         return None
 

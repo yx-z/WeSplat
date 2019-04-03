@@ -20,4 +20,8 @@ TMP_IMG = "tmp.png"
 
 NUM_PLAYERS_PER_TEAM = 4
 
-RANDOM_IMG_URL = "https://loremflickr.com/640/480/splatoon2"
+RAND_IMG_URL_BASE = "https://loremflickr.com/640/480/"
+RAND_IMG_KEYWORDS = ["splatoon", "splatoon2", "squid", "octopus",
+                     "nintendo", "pokemon", "mario", "funny", "joke",
+                     "fun", "laugh", "pikachu", "cat", "kitten",
+                     "kitty", "puppy", "pet", "dog", "rabbit"]
