@@ -2,9 +2,9 @@ import itchat
 
 from api import API_LEAGUE, API_RANKED, API_REGULAR
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
-    KEYWORDS_RANKED, KEYWORDS_REGULAR, UNKNOWN_MSG, CMD_QR, \
+    KEYWORDS_RANKED, KEYWORDS_REGULAR, CMD_QR, \
     KEYWORDS_ALL, KEYWORDS_RANDOM, KEYWORDS_QUERY
-from reply import reply_random, reply_battle, reply_salmon_run, reply_all
+from reply import reply_random, reply_battle, reply_salmon_run, reply_all, reply_unknown
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
@@ -34,7 +34,7 @@ def reply(msg):
         elif any_in(KEYWORDS_REGULAR):
             mode = API_REGULAR
         if mode is None:
-            requester.send_msg(UNKNOWN_MSG)
+            reply_unknown(requester)
         else:
             reply_battle(requester, mode, request_time, request_input)
 

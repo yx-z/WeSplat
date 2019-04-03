@@ -2,7 +2,7 @@ import os
 
 from api import request_next_salmon_run, request_salmon_run, \
     request_schedule, API_RANKED, API_REGULAR, API_LEAGUE
-from config import TMP_IMG, NUM_PLAYERS_PER_TEAM
+from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG
 from translation import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
@@ -125,3 +125,12 @@ def reply_random(requester):
                        "绿队: {}".format(mode,
                                        " ".join(team_a),
                                        " ".join(team_b)))
+
+
+def reply_unknown(requester):
+    img_url = "https://loremflickr.com/320/240/splatoon"
+    requester.send_msg(UNKNOWN_MSG)
+    download_img(img_url).save(TMP_IMG)
+    remove_if_exist(TMP_IMG)
+    if os.path.isfile(TMP_IMG):
+        requester.send_image(TMP_IMG)
