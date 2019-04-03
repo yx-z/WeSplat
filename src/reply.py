@@ -129,5 +129,5 @@ def reply_unknown(requester):
 
 
 def reply_img(requester, keyword: str):
-    img_url = "https://loremflickr.com/640/480/"
+    img_url = "https://loremflickr.com/320/240/"
     send_img(img_url + keyword, requester)
