@@ -15,7 +15,7 @@ UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "- 查询 (当前/下个/下下...个/X小时后) 全部/组排/单排/涂地/打工\n" \
               "- 查询随机 [用来随机武器私房]\n" \
               "- 查询XX图 [随机发一张关于XX的图]\n"
-DEFAULT_IMG_KEYWORD = "shanghai"
+DEFAULT_IMG_KEYWORD = "shanghai,Shanghai,上海"
 
 TMP_IMG = "tmp.png"
 
