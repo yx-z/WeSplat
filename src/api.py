@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 
 import requests
@@ -65,7 +66,7 @@ def request_img(keyword: str) -> Optional[str]:
     domain = "https://loremflickr.com/"
     base_url = domain + "json/320/240/"
     default_url = domain + "resized/defaultImage.small_320_240_nofilter.jpg"
-    img_json: dict = requests.get(base_url + keyword).json()
+    img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
 
     img_url = img_json.get("file", default_url)
     if img_url == default_url:
