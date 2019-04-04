@@ -63,9 +63,9 @@ def create_item(item_dict: dict) -> Item:
 
 
 def request_img(keyword: str) -> Optional[str]:
-    domain = "https://loremflickr.com/"
-    base_url = domain + "json/320/240/"
-    default_url = domain + "resized/defaultImage.small_320_240_nofilter.jpg"
+    web = "https://loremflickr.com/"
+    base_url = web + "json/320/240/"
+    default_url = web + "cache/resized/defaultImage.small_320_240_nofilter.jpg"
     img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
 
     img_url = img_json.get("file", default_url)
