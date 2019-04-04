@@ -133,4 +133,5 @@ def reply_img(requester, keyword: str):
     img_url = request_img(keyword)
     if img_url is None:
         img_url = request_img(DEFAULT_IMG_KEYWORD)
+        requester.send_msg("木有找到{}图。但我想念上海:".format(keyword))
     send_web_img(img_url, requester)
