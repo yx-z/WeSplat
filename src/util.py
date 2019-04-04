@@ -36,7 +36,7 @@ def combine_imgs(src: [Img], out: str, vertical=True) -> bool:
     return True
 
 
-def send_img(img_url: str, requester, file_name: str = TMP_IMG):
+def send_web_img(img_url: str, requester, file_name: str = TMP_IMG):
     remove_if_exist(file_name)
     download_img(img_url).save(file_name)
     if os.path.isfile(file_name):

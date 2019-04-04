@@ -1,12 +1,12 @@
 import os
 
 from api import request_next_salmon_run, request_salmon_run, \
-    request_schedule, API_RANKED, API_REGULAR, API_LEAGUE
-from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG
+    request_schedule, API_RANKED, API_REGULAR, API_LEAGUE, request_img
+from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG, DEFAULT_IMG_KEYWORD
 from translation import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
-    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_img
+    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_web_img
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -57,7 +57,7 @@ def reply_salmon_run(requester,
             weapon=" ".join(str(s) for s in list(map(
                 lambda w: dict_get(WEAPONS, w.name), run.weapons)))))
     if img:
-        send_img(run.stage.img_url, requester)
+        send_web_img(run.stage.img_url, requester)
 
         remove_if_exist(TMP_IMG)
         if combine_imgs(list(map(lambda w: download_img(w.img_url),
@@ -129,6 +129,8 @@ def reply_unknown(requester):
 
 
 def reply_img(requester, keyword: str):
-    img_url = "https://loremflickr.com/320/240/"
     requester.send_msg("{}图查询中".format(keyword))
-    send_img(img_url + keyword, requester)
+    img_url = request_img(keyword)
+    if img_url is None:
+        img_url = request_img(DEFAULT_IMG_KEYWORD)
+    send_web_img(img_url, requester)

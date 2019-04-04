@@ -59,3 +59,16 @@ def create_salmon_run(run_dict: dict) -> SalmonRun:
 def create_item(item_dict: dict) -> Item:
     img_base = "https://splatoon2.ink/assets/splatnet"
     return Item(item_dict["name"], img_base + item_dict["image"])
+
+
+def request_img(keyword: str) -> Optional[str]:
+    domain = "https://loremflickr.com/"
+    base_url = domain + "json/320/240/"
+    default_url = domain + "resized/defaultImage.small_320_240_nofilter.jpg"
+    img_json: dict = requests.get(base_url + keyword).json()
+
+    img_url = img_json.get("file", default_url)
+    if img_url == default_url:
+        return None
+    else:
+        return img_url
