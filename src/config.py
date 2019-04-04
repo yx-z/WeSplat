@@ -17,6 +17,9 @@ UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "- 查询XX图 [随机发一张关于XX的图]\n"
 DEFAULT_IMG_KEYWORD = "shanghai,Shanghai,上海"
 
+RAND_IMG_WIDTH = 320
+RAND_IMG_HEIGHT = 240
+
 TMP_IMG = "tmp.png"
 
 NUM_PLAYERS_PER_TEAM = 4

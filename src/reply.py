@@ -1,12 +1,12 @@
 import os
 
-from api import request_next_salmon_run, request_salmon_run, \
-    request_schedule, API_RANKED, API_REGULAR, API_LEAGUE, request_img
-from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG, DEFAULT_IMG_KEYWORD
+from api import req_nex_salmon_run, req_salmon_run, \
+    req_schedule, API_RANKED, API_REGULAR, API_LEAGUE, req_img
+from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG
 from translation import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
-    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_web_img
+    download_img, combine_imgs, HOURS_EPOCH, diff_minutes, dict_rand_value, send_web_img, fill_dim
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 
@@ -38,9 +38,9 @@ def reply_salmon_run(requester,
                      txt: bool = True,
                      img: bool = True):
     if "下" in request_input:
-        run = request_next_salmon_run()
+        run = req_nex_salmon_run()
     else:
-        run = request_salmon_run(request_time)
+        run = req_salmon_run(request_time)
     if run is None:
         requester.send_msg("木有找到当前打工信息")
         return
@@ -83,7 +83,7 @@ def reply_battle(requester,
             parsed = TIME.get(request_input[index], 0)
         query_time = msg_time + parsed * HOURS_EPOCH
 
-    schedule = request_schedule(mode, query_time)
+    schedule = req_schedule(mode, query_time)
     if schedule is None:
         requester.send_msg("木有找到当前模式信息")
         return
@@ -130,8 +130,7 @@ def reply_unknown(requester):
 
 def reply_img(requester, keyword: str):
     requester.send_msg("{}图查询中".format(keyword))
-    img_url = request_img(keyword)
+    img_url = req_img(keyword)
     if img_url is None:
-        img_url = request_img(DEFAULT_IMG_KEYWORD)
-        requester.send_msg("木有找到{}图。但我想念上海:".format(keyword))
+        img_url = fill_dim("https://picsum.photos/{}/{}/?random")
     send_web_img(img_url, requester)

@@ -5,7 +5,7 @@ import random
 import requests
 from PIL import Image as Img
 
-from config import TMP_IMG
+from config import TMP_IMG, RAND_IMG_HEIGHT, RAND_IMG_WIDTH
 
 MINUTES_EPOCH = 60
 HOURS_EPOCH = 60 * MINUTES_EPOCH
@@ -70,3 +70,7 @@ def list_rand_value(l: list):
 def remove_if_exist(file: str):
     if os.path.exists(file):
         os.remove(file)
+
+
+def fill_dim(src: str) -> str:
+    return src.format(RAND_IMG_WIDTH, RAND_IMG_HEIGHT)

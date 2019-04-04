@@ -4,13 +4,14 @@ from typing import Optional
 import requests
 
 from model import Item, Schedule, SalmonRun
+from util import fill_dim
 
 API_LEAGUE = "league"
 API_RANKED = "gachi"
 API_REGULAR = "regular"
 
 
-def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
+def req_schedule(mode: str, request_time: float) -> Optional[Schedule]:
     data_url = "https://splatoon2.ink/data/schedules.json"
     schedules = requests.get(data_url).json()
 
@@ -24,7 +25,7 @@ def request_schedule(mode: str, request_time: float) -> Optional[Schedule]:
     return None
 
 
-def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
+def req_salmon_run(request_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
 
@@ -34,7 +35,7 @@ def request_salmon_run(request_time: float) -> Optional[SalmonRun]:
     return None
 
 
-def request_next_salmon_run() -> Optional[SalmonRun]:
+def req_nex_salmon_run() -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
     details = salmon_runs["details"]
@@ -62,10 +63,11 @@ def create_item(item_dict: dict) -> Item:
     return Item(item_dict["name"], img_base + item_dict["image"])
 
 
-def request_img(keyword: str) -> Optional[str]:
-    web = "https://loremflickr.com/"
-    base_url = web + "json/320/240/"
-    default_url = web + "cache/resized/defaultImage.small_320_240_nofilter.jpg"
+def req_img(keyword: str) -> Optional[str]:
+    domain = "https://loremflickr.com/"
+    base_url = domain + fill_dim("json/{}/{}/")
+    default_url = domain + fill_dim(
+        "cache/resized/defaultImage.small_{}_{}_nofilter.jpg")
     img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
 
     img_url = img_json.get("file", default_url)
