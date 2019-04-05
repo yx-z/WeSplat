@@ -1,14 +1,17 @@
+import logging
+
 import itchat
 
 from api import API_LEAGUE, API_RANKED, API_REGULAR
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
     KEYWORDS_RANKED, KEYWORDS_REGULAR, CMD_QR, \
-    KEYWORDS_ALL, KEYWORDS_RANDOM
+    KEYWORDS_ALL, KEYWORDS_RANDOM, LOG_FILE
 from reply import reply_random, reply_battle, reply_salmon_run, reply_all, reply_unknown, reply_img
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
 def reply(msg):
+    logging.info(msg)
     request_input: str = msg.text
     request_time = msg.createTime
     requester = msg.user
@@ -42,6 +45,7 @@ def reply(msg):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename=LOG_FILE, filemode="a")
     if CMD_QR:
         itchat.auto_login(enableCmdQR=2)
     else:

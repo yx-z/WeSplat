@@ -20,5 +20,6 @@ RAND_IMG_WIDTH = 320
 RAND_IMG_HEIGHT = 240
 
 TMP_IMG = "tmp.png"
+LOG_FILE = "wesplat.log"
 
 NUM_PLAYERS_PER_TEAM = 4
