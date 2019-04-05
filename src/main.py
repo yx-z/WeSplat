@@ -11,7 +11,7 @@ from reply import reply_random, reply_battle, reply_salmon_run, reply_all, reply
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
 def reply(msg):
-    logging.info(msg)
+    logging.info(str(msg))
     request_input: str = msg.text
     request_time = msg.createTime
     requester = msg.user
@@ -45,7 +45,7 @@ def reply(msg):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename=LOG_FILE, filemode="a")
+    logging.basicConfig(filename=LOG_FILE, filemode="a", level=logging.INFO)
     if CMD_QR:
         itchat.auto_login(enableCmdQR=2)
     else:
