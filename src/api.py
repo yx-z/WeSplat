@@ -29,23 +29,44 @@ def req_salmon_run(request_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
 
-    for salmon_run in salmon_runs["details"]:
+    for salmon_run in salmon_runs.get("details", []):
         if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
             return create_salmon_run(salmon_run)
     return None
 
 
-def req_nex_salmon_run() -> Optional[SalmonRun]:
+def req_nex_salmon_run(request_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
-    details = salmon_runs["details"]
-    lens = len(details)
-    if lens == 0:
-        return None
-    elif lens == 1:
+    details = salmon_runs.get("details", [])
+
+    l = len(details)
+    for i in range(l):
+        salmon_run = details[i]
+        if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
+            if i + 1 < l:
+                return create_salmon_run(details[i + 1])
+            else:
+                return None
+
+    if l > 0:
         return create_salmon_run(details[0])
     else:
-        return create_salmon_run(details[1])
+        return None
+
+
+def req_img(keyword: str) -> Optional[str]:
+    domain = "https://loremflickr.com/"
+    base_url = domain + fill_dim("json/{}/{}/")
+    default_url = domain + fill_dim(
+        "cache/resized/defaultImage.small_{}_{}_nofilter.jpg")
+    img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
+
+    img_url = img_json.get("file", default_url)
+    if img_url == default_url:
+        return None
+    else:
+        return img_url
 
 
 def create_salmon_run(run_dict: dict) -> SalmonRun:
@@ -61,17 +82,3 @@ def create_salmon_run(run_dict: dict) -> SalmonRun:
 def create_item(item_dict: dict) -> Item:
     img_base = "https://splatoon2.ink/assets/splatnet"
     return Item(item_dict["name"], img_base + item_dict["image"])
-
-
-def req_img(keyword: str) -> Optional[str]:
-    domain = "https://loremflickr.com/"
-    base_url = domain + fill_dim("json/{}/{}/")
-    default_url = domain + fill_dim(
-        "cache/resized/defaultImage.small_{}_{}_nofilter.jpg")
-    img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
-
-    img_url = img_json.get("file", default_url)
-    if img_url == default_url:
-        return None
-    else:
-        return img_url

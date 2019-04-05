@@ -38,7 +38,7 @@ def reply_salmon_run(requester,
                      txt: bool = True,
                      img: bool = True):
     if "下" in request_input:
-        run = req_nex_salmon_run()
+        run = req_nex_salmon_run(request_time)
     else:
         run = req_salmon_run(request_time)
     if run is None:
