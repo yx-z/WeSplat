@@ -24,7 +24,8 @@ LOG_FILE = "wesplat.log"
 
 NUM_PLAYERS_PER_TEAM = 4
 
-API_KEY = ""  # placeholder
-CITY_LON = ""  # placeholder
-CITY_LAL = ""  # placeholder
-USER = ""  # placeholder
+# placeholder
+API_KEY = ""
+CITY_LON = ""
+CITY_LAL = ""
+USER = ""

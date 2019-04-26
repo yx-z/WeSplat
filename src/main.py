@@ -9,7 +9,11 @@ from api import API_LEAGUE, API_RANKED, API_REGULAR, req_daily_weather
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
     KEYWORDS_RANKED, KEYWORDS_REGULAR, CMD_QR, \
     KEYWORDS_ALL, KEYWORDS_RANDOM, LOG_FILE, USER
-from reply import reply_random, reply_battle, reply_salmon_run, reply_all, reply_unknown, reply_img
+from reply import reply_random, reply_battle, reply_salmon_run, \
+    reply_all, reply_unknown, reply_img
+
+MIN_IN_SEC = 60
+DAY_IN_SEC = 24 * 60 * MIN_IN_SEC
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
@@ -57,7 +61,7 @@ def send_weather():
                             .format(weather.weather,
                                     weather.max_tmp,
                                     weather.min_tmp))
-            time.sleep(1)
+            time.sleep(DAY_IN_SEC - 5 * MIN_IN_SEC)
 
 
 if __name__ == "__main__":
