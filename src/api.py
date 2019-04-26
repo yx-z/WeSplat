@@ -3,7 +3,8 @@ from typing import Optional
 
 import requests
 
-from model import Item, Schedule, SalmonRun
+from config import API_KEY, CITY_LON, CITY_LAL
+from model import Item, Schedule, SalmonRun, Weather
 from util import fill_dim
 
 API_LEAGUE = "league"
@@ -11,31 +12,31 @@ API_RANKED = "gachi"
 API_REGULAR = "regular"
 
 
-def req_schedule(mode: str, request_time: float) -> Optional[Schedule]:
+def req_schedule(mode: str, req_time: float) -> Optional[Schedule]:
     data_url = "https://splatoon2.ink/data/schedules.json"
     schedules = requests.get(data_url).json()
 
     for schedule in schedules.get(mode, []):
         start_time = schedule["start_time"]
         end_time = schedule["end_time"]
-        if start_time <= request_time <= end_time:
+        if start_time <= req_time <= end_time:
             return Schedule(start_time, end_time, schedule["rule"]["name"],
                             [create_item(schedule["stage_a"]),
                              create_item(schedule["stage_b"])])
     return None
 
 
-def req_salmon_run(request_time: float) -> Optional[SalmonRun]:
+def req_salmon_run(req_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
 
     for salmon_run in salmon_runs.get("details", []):
-        if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
+        if salmon_run["start_time"] <= req_time <= salmon_run["end_time"]:
             return create_salmon_run(salmon_run)
     return None
 
 
-def req_nex_salmon_run(request_time: float) -> Optional[SalmonRun]:
+def req_nex_salmon_run(req_time: float) -> Optional[SalmonRun]:
     data_url = "https://splatoon2.ink/data/coop-schedules.json"
     salmon_runs = requests.get(data_url).json()
     details = salmon_runs.get("details", [])
@@ -43,7 +44,7 @@ def req_nex_salmon_run(request_time: float) -> Optional[SalmonRun]:
     l = len(details)
     for i in range(l):
         salmon_run = details[i]
-        if salmon_run["start_time"] <= request_time <= salmon_run["end_time"]:
+        if salmon_run["start_time"] <= req_time <= salmon_run["end_time"]:
             if i + 1 < l:
                 return create_salmon_run(details[i + 1])
             else:
@@ -82,3 +83,16 @@ def create_salmon_run(run_dict: dict) -> SalmonRun:
 def create_item(item_dict: dict) -> Item:
     img_base = "https://splatoon2.ink/assets/splatnet"
     return Item(item_dict["name"], img_base + item_dict["image"])
+
+
+def req_daily_weather() -> Weather:
+    data_url = "https://api.darksky.net/forecast/{}/{},{}" \
+        .format(API_KEY, CITY_LAL, CITY_LON)
+    data: dict = requests.get(data_url).json()["daily"]["data"][0]
+    return Weather(conv_tmp(data["temperatureHigh"]),
+                   conv_tmp(data["temperatureLow"]),
+                   data["summary"])
+
+
+def conv_tmp(fahrenheit: float) -> float:
+    return round((fahrenheit - 32) / 1.8, 1)

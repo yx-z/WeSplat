@@ -1,11 +1,14 @@
+import datetime
 import logging
+import threading
+import time
 
 import itchat
 
-from api import API_LEAGUE, API_RANKED, API_REGULAR
+from api import API_LEAGUE, API_RANKED, API_REGULAR, req_daily_weather
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
     KEYWORDS_RANKED, KEYWORDS_REGULAR, CMD_QR, \
-    KEYWORDS_ALL, KEYWORDS_RANDOM, LOG_FILE
+    KEYWORDS_ALL, KEYWORDS_RANDOM, LOG_FILE, USER
 from reply import reply_random, reply_battle, reply_salmon_run, reply_all, reply_unknown, reply_img
 
 
@@ -44,10 +47,25 @@ def reply(msg):
             reply_battle(requester, mode, request_time, request_input)
 
 
+def send_weather():
+    while True:
+        dt = datetime.datetime.now().time()
+        if dt.hour == 7 and dt.minute == 0 and dt.second == 0:
+            weather = req_daily_weather()
+            friend = itchat.search_friends(remarkName=USER)[0]
+            friend.send_msg("今日: {} 最高: {}°, 最低: {}°"
+                            .format(weather.weather,
+                                    weather.max_tmp,
+                                    weather.min_tmp))
+            time.sleep(1)
+
+
 if __name__ == "__main__":
     logging.basicConfig(filename=LOG_FILE, filemode="a", level=logging.INFO)
     if CMD_QR:
         itchat.auto_login(enableCmdQR=2)
     else:
         itchat.auto_login()
+    t = threading.Thread(target=send_weather)
+    t.start()
     itchat.run()
