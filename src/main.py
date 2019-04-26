@@ -13,7 +13,8 @@ from reply import reply_random, reply_battle, reply_salmon_run, \
     reply_all, reply_unknown, reply_img
 
 MIN_IN_SEC = 60
-DAY_IN_SEC = 24 * 60 * MIN_IN_SEC
+HOUR_IN_SEC = 60 * MIN_IN_SEC
+DAY_IN_SEC = 24 * HOUR_IN_SEC
 
 
 @itchat.msg_register(itchat.content.TEXT, isGroupChat=True, isFriendChat=True)
@@ -54,14 +55,16 @@ def reply(msg):
 def send_weather():
     while True:
         dt = datetime.datetime.now().time()
-        if dt.hour == 7 and dt.minute == 0 and dt.second == 0:
+        if dt.hour == 7:
             weather = req_daily_weather()
             friend = itchat.search_friends(remarkName=USER)[0]
             friend.send_msg("今日: {} 最高: {}°, 最低: {}°"
                             .format(weather.weather,
                                     weather.max_tmp,
                                     weather.min_tmp))
-            time.sleep(DAY_IN_SEC - 5 * MIN_IN_SEC)
+            time.sleep(DAY_IN_SEC)
+        else:
+            time.sleep(HOUR_IN_SEC)
 
 
 if __name__ == "__main__":
