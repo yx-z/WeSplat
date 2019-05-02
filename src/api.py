@@ -3,8 +3,7 @@ from typing import Optional
 
 import requests
 
-from config import API_KEY, CITY_LON, CITY_LAL
-from model import Item, Schedule, SalmonRun, Weather
+from model import Item, Schedule, SalmonRun
 from util import fill_dim
 
 API_LEAGUE = "league"
@@ -83,16 +82,3 @@ def create_salmon_run(run_dict: dict) -> SalmonRun:
 def create_item(item_dict: dict) -> Item:
     img_base = "https://splatoon2.ink/assets/splatnet"
     return Item(item_dict["name"], img_base + item_dict["image"])
-
-
-def req_daily_weather() -> Weather:
-    data_url = "https://api.darksky.net/forecast/{}/{},{}" \
-        .format(API_KEY, CITY_LAL, CITY_LON)
-    data: dict = requests.get(data_url).json()["daily"]["data"][0]
-    return Weather(conv_tmp(data["temperatureHigh"]),
-                   conv_tmp(data["temperatureLow"]),
-                   data["summary"])
-
-
-def conv_tmp(fahrenheit: float) -> float:
-    return round((fahrenheit - 32) / 1.8, 1)

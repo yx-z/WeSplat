@@ -24,10 +24,3 @@ class SalmonRun:
     end_time: float
     stage: Item
     weapons: [Item]
-
-
-@dataclass
-class Weather:
-    max_tmp: float
-    min_tmp: float
-    weather: str
