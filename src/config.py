@@ -1,4 +1,4 @@
-from translation import CN_LEAGUE, CN_RANKED, CN_REGULAR, CN_SALMON_RUN
+from splat_translate import CN_LEAGUE, CN_RANKED, CN_REGULAR, CN_SALMON_RUN
 
 CMD_QR = True
 

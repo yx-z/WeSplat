@@ -1,13 +1,13 @@
 import os
 
-from api import req_nex_salmon_run, req_salmon_run, \
-    req_schedule, API_RANKED, API_REGULAR, API_LEAGUE, req_img
 from config import TMP_IMG, NUM_PLAYERS_PER_TEAM, UNKNOWN_MSG
-from translation import STAGES, TIME, BATTLE_TYPES, \
+from splat_api import req_nex_salmon_run, req_salmon_run, \
+    req_schedule, API_RANKED, API_REGULAR, API_LEAGUE
+from splat_translate import STAGES, TIME, BATTLE_TYPES, \
     WEAPONS, CN_LEAGUE, CN_RANKED, CN_REGULAR
 from util import remove_if_exist, dict_get, diff_hours, \
     download_img, combine_imgs, HOURS_EPOCH, diff_minutes, \
-    dict_rand_value, send_web_img, fill_dim
+    dict_rand_value, send_web_img
 
 MODES = {API_LEAGUE: CN_LEAGUE, API_RANKED: CN_RANKED, API_REGULAR: CN_REGULAR}
 

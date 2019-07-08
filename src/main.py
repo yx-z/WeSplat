@@ -2,12 +2,12 @@ import logging
 
 import itchat
 
-from api import API_LEAGUE, API_RANKED, API_REGULAR
+from splat_api import API_LEAGUE, API_RANKED, API_REGULAR
 from config import KEYWORDS_SALMON_RUN, KEYWORDS_LEAGUE, \
     KEYWORDS_RANKED, KEYWORDS_REGULAR, CMD_QR, \
     KEYWORDS_ALL, KEYWORDS_RANDOM, LOG_FILE
-from reply import reply_random, reply_battle, reply_salmon_run, \
-    reply_all, reply_unknown, reply_img
+from splat_reply import reply_random, reply_battle, reply_salmon_run, \
+    reply_all, reply_unknown
 
 MIN_IN_SEC = 60
 HOUR_IN_SEC = 60 * MIN_IN_SEC

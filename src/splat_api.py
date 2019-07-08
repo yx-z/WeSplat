@@ -1,10 +1,7 @@
-import json
 from typing import Optional
 
 import requests
-
-from model import Item, Schedule, SalmonRun
-from util import fill_dim
+from splat_model import Item, Schedule, SalmonRun
 
 API_LEAGUE = "league"
 API_RANKED = "gachi"
