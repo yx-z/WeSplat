@@ -27,9 +27,7 @@ def reply(msg):
     def any_in(keywords: [str]) -> bool:
         return any(keyword in request_input for keyword in keywords)
 
-    if request_input.endswith("图"):  # 查询XXX图
-        reply_img(requester, request_input[2:-1])
-    elif any_in(KEYWORDS_RANDOM):
+    if any_in(KEYWORDS_RANDOM):
         reply_random(requester)
     elif any_in(KEYWORDS_ALL):
         reply_all(requester, request_time, request_input)

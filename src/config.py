@@ -16,9 +16,6 @@ UNKNOWN_MSG = "你怎么辣么可爱 本宝宝听不懂你在说什么\n" \
               "- 查询随机 [用来随机武器私房]\n" \
               "- 查询XX图 [随机发一张关于XX的图]\n"
 
-RAND_IMG_WIDTH = 320
-RAND_IMG_HEIGHT = 240
-
 TMP_IMG = "tmp.png"
 LOG_FILE = "wesplat.log"
 

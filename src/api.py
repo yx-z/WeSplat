@@ -55,20 +55,6 @@ def req_nex_salmon_run(req_time: float) -> Optional[SalmonRun]:
         return None
 
 
-def req_img(keyword: str) -> Optional[str]:
-    domain = "https://loremflickr.com/"
-    base_url = domain + fill_dim("json/{}/{}/")
-    default_url = domain + fill_dim(
-        "cache/resized/defaultImage.small_{}_{}_nofilter.jpg")
-    img_json: dict = json.loads(requests.get(base_url + keyword).text[:-3])
-
-    img_url = img_json.get("file", default_url)
-    if img_url == default_url:
-        return None
-    else:
-        return img_url
-
-
 def create_salmon_run(run_dict: dict) -> SalmonRun:
     weapons = list(map(lambda weapon_dict: next(v for (k, v)
                                                 in weapon_dict.items()

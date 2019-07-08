@@ -8,5 +8,3 @@ WeChat auto-reply script for Splatoon 2 schedules. Also an EasterEgg for queryin
 
 ## Credits
 - Splatoon Data and image source: [Splatoon2.ink](https://splatoon2.ink)
-- Random Image source: [Lorem Picsum
-](https://picsum.photos/) and [LoremFlickr](https://loremflickr.com/)
