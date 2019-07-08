@@ -1,5 +1,5 @@
 # WeSplat
-WeChat auto-reply script for Splatoon 2 schedules. Also an EasterEgg for querying random images by keyword.
+WeChat auto-reply script for Splatoon 2 schedules.
 
 ## Configuration
 - Python Version: 3.7.
