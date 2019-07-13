@@ -42,6 +42,8 @@ def reply_salmon_run(requester,
         run = req_nex_salmon_run(request_time)
     else:
         run = req_salmon_run(request_time)
+        if run is None:
+            run = req_nex_salmon_run(request_time)
     if run is None:
         requester.send_msg("木有找到当前打工信息")
         return
